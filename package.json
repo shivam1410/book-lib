@@ -1,0 +1,23 @@
+{
+  "name": "book-lib",
+  "version": "1.0.0",
+  "description": "Basic Book Index",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shivam1410/book-lib.git"
+  },
+  "author": "shivam garg",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shivam1410/book-lib/issues"
+  },
+  "homepage": "https://github.com/shivam1410/book-lib#readme",
+  "dependencies": {
+    "axios": "0.21.0",
+    "express": "4.17.1"
+  }
+}
