@@ -11,7 +11,7 @@ function createFullHTML(directory, baseUrl) {
 
     let directory_list_html = createDirList(directory, baseUrl);
 
-    let full_html = `<!doctype html><html lang="en"><head><title>Hello, world!</title></head>
+    let full_html = `<!doctype html><html lang="en"><head><title>Books Library</title></head>
                      <body>${directory_list_html}</body></html>`;
     return new Buffer(full_html);
 }
