@@ -1,8 +1,8 @@
 const axios = require('axios');
 const express = require('express');
 
-const hostname = 'https://books-col.herokuapp.com/';
-const appBaseURL = `${hostname}`;
+port = process.env.PORT || 80;
+const appBaseURL = 'https://books-col.herokuapp.com/';
 const githubRepoURL = `https://github.com/shivam1410/books`;
 
 const app = express();
@@ -60,7 +60,7 @@ function createDirList(directory = [], base_path = ''){
 }
 
 
-app.listen(hostname, () => {
+var server = app.listen(port, () => {
   console.log(`Server running at ${appBaseURL}`);
 });
 
