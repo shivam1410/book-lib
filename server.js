@@ -2,7 +2,7 @@ const axios = require('axios');
 const express = require('express');
 
 const hostname = 'https://books-col.herokuapp.com/';
-const appBaseURL = `http://${hostname}`;
+const appBaseURL = `${hostname}`;
 const githubRepoURL = `https://github.com/shivam1410/books`;
 
 const app = express();
