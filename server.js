@@ -2,7 +2,7 @@ const axios = require('axios');
 const express = require('express');
 
 port = process.env.PORT || 80;
-const appBaseURL = 'https://books-col.herokuapp.com/';
+const appBaseURL = 'https://books-col.herokuapp.com';
 const githubRepoURL = `https://github.com/shivam1410/books`;
 
 const app = express();
