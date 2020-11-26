@@ -48,11 +48,12 @@ function createDirList(directory = [], base_path = ''){
                 'redirecturi': url,
                 'basepath': base_path + '/' + path
             }
+            //shivam1410/books/raw/master/Cloud/A%20Complete%20Guide%20to%20Cloud%20Computing.pdf
             let queryString = new URLSearchParams(query).toString();
             if(type != "blob"){
                 temp += `<li><a href="${appBaseURL}/url?${queryString}"> ${path} </a></li>`;
             } else{
-                temp += `<li><a href="${githubRepoURL}/blob/master${base_path}/${path}"> ${path} </a></li>`;
+                temp += `<li><a href="${githubRepoURL}/raw/master${base_path}/${path}"> ${path} </a></li>`;
             }
         }
     }
