@@ -1,10 +1,11 @@
 {
   "name": "book-lib",
   "version": "1.0.0",
-  "description": "Basic Book Index",
-  "main": "server.js",
+  "description": "Basic Book Index - Static site for GitHub Pages",
+  "main": "index.html",
   "scripts": {
-    "start": "node server.js"
+    "start": "npx serve .",
+    "dev": "npx serve ."
   },
   "repository": {
     "type": "git",
@@ -15,9 +16,8 @@
   "bugs": {
     "url": "https://github.com/shivam1410/book-lib/issues"
   },
-  "homepage": "https://github.com/shivam1410/book-lib#readme",
-  "dependencies": {
-    "axios": "0.21.1",
-    "express": "4.17.1"
+  "homepage": "https://shivam1410.github.io/book-lib/",
+  "devDependencies": {
+    "serve": "^14.2.0"
   }
 }

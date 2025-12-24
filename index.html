@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books Library</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c33;
+        }
+        
+        .breadcrumb {
+            margin-bottom: 20px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 6px;
+        }
+        
+        .breadcrumb a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        li a {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.2s;
+        }
+        
+        li a:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+        
+        .folder-icon::before {
+            content: '📁 ';
+            margin-right: 8px;
+        }
+        
+        .file-icon::before {
+            content: '📄 ';
+            margin-right: 8px;
+        }
+        
+        /* PDF Modal Styles */
+        .pdf-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s;
+        }
+        
+        .pdf-modal.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .pdf-modal-content {
+            position: relative;
+            width: 95%;
+            height: 95%;
+            max-width: 1200px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .pdf-modal-header {
+            padding: 15px 20px;
+            background: #667eea;
+            color: white;
+            border-radius: 8px 8px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .pdf-modal-title {
+            font-weight: 600;
+            font-size: 18px;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .pdf-modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 5px 15px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        
+        .pdf-modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .pdf-modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-left: 15px;
+        }
+        
+        .pdf-modal-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .pdf-modal-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .pdf-modal-body {
+            flex: 1;
+            overflow: auto;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        
+        .pdf-viewer {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 4px;
+        }
+        
+        #pdfViewerContainer {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+        }
+        
+        #pdfCanvas {
+            max-width: 100%;
+            height: auto;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        #pdfControls {
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+        }
+        
+        #pdfControls button:hover {
+            background: #5568d3 !important;
+        }
+        
+        #pdfControls button:disabled {
+            background: #ccc !important;
+            cursor: not-allowed;
+        }
+        
+        .pdf-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #666;
+        }
+        
+        .pdf-loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Books Library</h1>
+        <div id="breadcrumb" class="breadcrumb" style="display: none;">
+            <a href="/">Home</a><span id="breadcrumb-path"></span>
+        </div>
+        <div id="loading" class="loading">Loading...</div>
+        <div id="error" class="error" style="display: none;"></div>
+        <div id="content"></div>
+    </div>
+    
+    <!-- PDF Modal -->
+    <div id="pdfModal" class="pdf-modal">
+        <div class="pdf-modal-content">
+            <div class="pdf-modal-header">
+                <div class="pdf-modal-title" id="pdfModalTitle">Loading PDF...</div>
+                <div class="pdf-modal-actions">
+                    <a id="pdfDownloadBtn" class="pdf-modal-btn" href="#" target="_blank" download>Download</a>
+                    <a id="pdfOpenBtn" class="pdf-modal-btn" href="#" target="_blank">Open in New Tab</a>
+                    <button class="pdf-modal-close" onclick="closePdfModal()">&times;</button>
+                </div>
+            </div>
+            <div class="pdf-modal-body">
+                <div id="pdfLoading" class="pdf-loading">
+                    <div class="pdf-loading-spinner"></div>
+                    <p>Loading PDF...</p>
+                </div>
+                <div id="pdfViewerContainer" style="display: none; width: 100%; height: 100%; overflow: auto;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
+
