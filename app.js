@@ -153,8 +153,10 @@ async function loadDirectory(path = '') {
         loadingEl.style.display = 'none';
         
         // Update URL without reloading
-        // Encode each path segment for the URL
-        const urlPath = path ? '/' + path.split('/').map(segment => encodeURIComponent(segment)).join('/') : '/';
+        // Preserve the base path '/book-lib' when updating the URL
+        const basePath = '/book-lib';
+        const encodedPath = path ? path.split('/').map(segment => encodeURIComponent(segment)).join('/') : '';
+        const urlPath = basePath + (encodedPath ? '/' + encodedPath : '') + '/';
         window.history.pushState({ path: path, history: [...pathHistory, path] }, '', urlPath);
         currentPath = path;
         
